@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 YouTube to MP3 Downloader
-A simple script to download YouTube videos as MP3 files using yt-dlp.
+A simple script to download YouTube videos as MP3 files with embedded thumbnails using yt-dlp.
 """
 
 import os
@@ -13,7 +13,7 @@ import yt_dlp
 
 def download_youtube_as_mp3(url, output_dir="./downloads", quality="192"):
     """
-    Download a YouTube video as an MP3 file.
+    Download a YouTube video as an MP3 file with embedded thumbnail.
     
     Args:
         url (str): YouTube URL to download
@@ -30,11 +30,22 @@ def download_youtube_as_mp3(url, output_dir="./downloads", quality="192"):
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': quality,
-        }],
+        'writethumbnail': True,  # Download thumbnail
+        'postprocessors': [
+            {
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': quality,
+            },
+            {
+                'key': 'EmbedThumbnail',  # Embed thumbnail as album art
+                'already_have_thumbnail': False,
+            },
+            {
+                'key': 'FFmpegMetadata',  # Add metadata
+                'add_metadata': True,
+            },
+        ],
         'postprocessor_args': [
             '-ar', '44100',  # Sample rate
         ],
@@ -45,7 +56,7 @@ def download_youtube_as_mp3(url, output_dir="./downloads", quality="192"):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             print(f"Downloading: {url}")
             ydl.download([url])
-            print("Download completed successfully!")
+            print("Download completed successfully with embedded thumbnail!")
             return True
             
     except yt_dlp.utils.DownloadError as e:
@@ -79,7 +90,7 @@ def validate_url(url):
 def main():
     """Main function to handle command line arguments and execute download."""
     parser = argparse.ArgumentParser(
-        description="Download YouTube videos as MP3 files",
+        description="Download YouTube videos as MP3 files with embedded thumbnails",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

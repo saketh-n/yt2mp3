@@ -1,15 +1,17 @@
 # YouTube to MP3 Downloader
 
-A simple Python script to download YouTube videos as MP3 files using `yt-dlp`.
+A simple Python script to download YouTube videos as MP3 files with embedded thumbnails using `yt-dlp`.
 
 ## Features
 
 - Download YouTube videos as high-quality MP3 files
+- **Automatic thumbnail embedding** - Video thumbnails are embedded as album art
 - Configurable audio quality (96-320 kbps)
 - Custom output directory support
 - URL validation
 - Error handling and user-friendly messages
 - Command-line interface
+- Metadata preservation
 
 ## Prerequisites
 
@@ -89,6 +91,8 @@ python yt2mp3.py "https://www.youtube.com/watch?v=VIDEO_ID_2"
 - Files are saved to the specified output directory (default: `./downloads/`)
 - Audio is converted to MP3 format with the specified quality
 - Sample rate is set to 44.1 kHz for optimal compatibility
+- **Video thumbnails are automatically embedded as album art/cover image**
+- Metadata (title, uploader, etc.) is preserved in the MP3 file
 
 ## Error Handling
 
